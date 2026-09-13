@@ -16,17 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download verified rollback Godot Web payload
+      - name: Download verified rollback Godot Web payload from immutable Vercel deployment
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/BUILD_SHA.txt?token=CE5ZHCA7D747EA6WNO556GTKU4JGZAA'
-          curl -fL --retry 3 -o game-f351963.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.position.worklet.js?token=CE5ZHCFNYAUNAN4PSE6W43TKU4JGZAA'
-          curl -fL --retry 3 -o game-f351963.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.worklet.js?token=CE5ZHCBYOBLJLOV6TU5MBJDKU4JGZAA'
-          curl -fL --retry 3 -o game-f351963.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.js?token=CE5ZHCDTBEZB7TRY562CRLTKU4JGZAA'
-          curl -fL --retry 3 -o game-f351963.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.pck?token=CE5ZHCCQEVD3JKBQWNO4WMTKU4JGZAA'
-          curl -fL --retry 3 -o game-f351963.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.wasm?token=CE5ZHCEORXJBQORQSPASR2LKU4JGZAA'
-          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.html?token=CE5ZHCBV2RWTC4K7GRQRIBLKU4JGZAA'
+          BASE='https://cat-game-city-leg590yn1-junkuan5168-7329.vercel.app'
+          SHARE='ZSIFxzfLNr96HQqugbVGSpAK75qtjVEH'
+          COOKIE='/tmp/vercel.cookies'
+
+          curl -fsSL -c "$COOKIE" -b "$COOKIE" "$BASE/?_vercel_share=$SHARE" -o /dev/null
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o BUILD_SHA.txt "$BASE/playtest/BUILD_SHA.txt"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o game-f351963.audio.position.worklet.js "$BASE/playtest/game-f351963.audio.position.worklet.js"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o game-f351963.audio.worklet.js "$BASE/playtest/game-f351963.audio.worklet.js"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o game-f351963.js "$BASE/playtest/game-f351963.js"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o game-f351963.pck "$BASE/playtest/game-f351963.pck"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o game-f351963.wasm "$BASE/playtest/game-f351963.wasm"
+          curl -fL --retry 3 -c "$COOKIE" -b "$COOKIE" -o index.html "$BASE/playtest/index.html"
+
           test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'f35196392902d62dd2733a5b2b6e9ae6dfbeab3d'
           test "$(stat -c%s game-f351963.pck)" = '8957716'
           test "$(stat -c%s game-f351963.wasm)" = '39514754'
@@ -44,5 +50,3 @@ jobs:
           fi
           git commit -m 'deploy: import rollback Godot Web f351963'
           git push origin main
-
-# retry with refreshed signed URLs
