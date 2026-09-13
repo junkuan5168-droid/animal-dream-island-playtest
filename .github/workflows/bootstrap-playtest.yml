@@ -44,3 +44,5 @@ jobs:
           fi
           git commit -m 'deploy: import rollback Godot Web f351963'
           git push origin main
+
+# retry with refreshed signed URLs
