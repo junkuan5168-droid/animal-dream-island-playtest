@@ -1,0 +1,49 @@
+name: Bootstrap latest Animal Dream Island playtest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/bootstrap-playtest.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download verified Godot Web payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/BUILD_SHA.txt?token=CE5ZHCCGHAKJU2I5JSQXBOLKU4DXRAA'
+          curl -fL --retry 3 -o game-a9927da.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.audio.position.worklet.js?token=CE5ZHCDNOBKNTBSSO3RBPQLKU4DXRAA'
+          curl -fL --retry 3 -o game-a9927da.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.audio.worklet.js?token=CE5ZHCEBNIAITRO3MXCQFQTKU4DXRAA'
+          curl -fL --retry 3 -o game-a9927da.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.js?token=CE5ZHCEC2WHNE2ZA5C3ALHTKU4DXRAA'
+          curl -fL --retry 3 -o game-a9927da.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.pck?token=CE5ZHCDCVAZOIP5I3XEA5B3KU4DXRAA'
+          curl -fL --retry 3 -o game-a9927da.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.wasm?token=CE5ZHCHUR3BU6CP4FTVC6PLKU4DXRAA'
+          curl -fL --retry 3 -o index.apple-touch-icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.apple-touch-icon.png?token=CE5ZHCFG7FDDE553KPLTA6DKU4DXRAA'
+          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.html?token=CE5ZHCDLD3YQBYYJFXWDCGDKU4DXRAA'
+          curl -fL --retry 3 -o index.icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.icon.png?token=CE5ZHCGQJNWUYEF4EK4Z373KU4DXRAA'
+          curl -fL --retry 3 -o index.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.png?token=CE5ZHCGL7IXTDKMFALOAPSDKU4DXRAA'
+          test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'a9927da3d7dafc8877ea9fd49040b16eb7a9e1b9'
+          test "$(stat -c%s game-a9927da.pck)" = '8959732'
+          test "$(stat -c%s game-a9927da.wasm)" = '39514754'
+
+      - name: Commit imported playtest payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add BUILD_SHA.txt game-a9927da.* index.html index.apple-touch-icon.png index.icon.png index.png
+          if git diff --cached --quiet; then
+            echo 'Payload already current.'
+            exit 0
+          fi
+          git commit -m 'deploy: import verified Godot Web a9927da'
+          git push origin main
