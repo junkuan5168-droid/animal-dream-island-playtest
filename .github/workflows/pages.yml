@@ -1,0 +1,49 @@
+name: Deploy Animal Dream Island Playtest
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'index*.png'
+      - 'game-*'
+      - 'BUILD_SHA.txt'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify playtest payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s index.html
+          test -s game-a9927da.pck
+          test -s game-a9927da.wasm
+          test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'a9927da3d7dafc8877ea9fd49040b16eb7a9e1b9'
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
