@@ -1,4 +1,4 @@
-name: Bootstrap latest Animal Dream Island playtest
+name: Bootstrap rollback Animal Dream Island playtest
 
 on:
   push:
@@ -16,34 +16,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download verified Godot Web payload
+      - name: Download verified rollback Godot Web payload
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/BUILD_SHA.txt?token=CE5ZHCAHVK3F3H2INFT4GJTKU4EL7AA'
-          curl -fL --retry 3 -o game-a9927da.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.audio.position.worklet.js?token=CE5ZHCFX47NADPIZ7S25DQTKU4EL7AA'
-          curl -fL --retry 3 -o game-a9927da.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.audio.worklet.js?token=CE5ZHCD6DNSHYQBYPEAT5W3KU4EL7AA'
-          curl -fL --retry 3 -o game-a9927da.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.js?token=CE5ZHCFUKGA5MEX6HZURLYDKU4EL7AA'
-          curl -fL --retry 3 -o game-a9927da.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.pck?token=CE5ZHCABG3EOAT3GWGJ32SLKU4EL7AA'
-          curl -fL --retry 3 -o game-a9927da.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/game-a9927da.wasm?token=CE5ZHCHXERQGJH3R77HKY2LKU4EL7AA'
-          curl -fL --retry 3 -o index.apple-touch-icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.apple-touch-icon.png?token=CE5ZHCBALLFAVQZ6H45Y4ADKU4EL7AA'
-          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.html?token=CE5ZHCCPW7TCJVPZALROW2LKU4EL7AA'
-          curl -fL --retry 3 -o index.icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.icon.png?token=CE5ZHCBW3F72PLS6ZXVQCGTKU4EL7AA'
-          curl -fL --retry 3 -o index.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/main/playtest/index.png?token=CE5ZHCDE2BBIXEE3YEWK26DKU4EL7AA'
-          test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'a9927da3d7dafc8877ea9fd49040b16eb7a9e1b9'
-          test "$(stat -c%s game-a9927da.pck)" = '8959732'
-          test "$(stat -c%s game-a9927da.wasm)" = '39514754'
+          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/BUILD_SHA.txt?token=CE5ZHCHCMWWB5MLPSHWJCZTKU4IVJAA'
+          curl -fL --retry 3 -o game-f351963.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.position.worklet.js?token=CE5ZHCE56SK6CVOYXTINO5LKU4IVJAA'
+          curl -fL --retry 3 -o game-f351963.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.worklet.js?token=CE5ZHCH2JG4WVNN5BDM73HTKU4IVJAA'
+          curl -fL --retry 3 -o game-f351963.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.js?token=CE5ZHCCMWVCOFOWZ7FMMSZLKU4IVJAA'
+          curl -fL --retry 3 -o game-f351963.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.pck?token=CE5ZHCDFV3IQTUGL2SKQSFLKU4IVJAA'
+          curl -fL --retry 3 -o game-f351963.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.wasm?token=CE5ZHCFWBOLOCQIVVMPVDSLKU4IVJAA'
+          curl -fL --retry 3 -o index.apple-touch-icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.apple-touch-icon.png?token=CE5ZHCCIZPTXCZ3WMOHE3NTKU4IVJAA'
+          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.html?token=CE5ZHCATQ3MRBBQQIGFREQDKU4IVJAA'
+          curl -fL --retry 3 -o index.icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.icon.png?token=CE5ZHCDNMGKBDVNTU2YRAZ3KU4IVJAA'
+          curl -fL --retry 3 -o index.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.png?token=CE5ZHCD6IAFSLF53DC6QEQ3KU4IVJAA'
+          test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'f35196392902d62dd2733a5b2b6e9ae6dfbeab3d'
+          test "$(stat -c%s game-f351963.pck)" = '8957716'
+          test "$(stat -c%s game-f351963.wasm)" = '39514754'
 
-      - name: Commit imported playtest payload
+      - name: Commit imported rollback playtest payload
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add BUILD_SHA.txt game-a9927da.* index.html index.apple-touch-icon.png index.icon.png index.png
+          git add BUILD_SHA.txt game-f351963.* index.html index.apple-touch-icon.png index.icon.png index.png
           if git diff --cached --quiet; then
             echo 'Payload already current.'
             exit 0
           fi
-          git commit -m 'deploy: import verified Godot Web a9927da'
+          git commit -m 'deploy: import rollback Godot Web f351963'
           git push origin main
