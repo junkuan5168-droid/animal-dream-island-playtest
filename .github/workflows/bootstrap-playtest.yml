@@ -20,16 +20,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/BUILD_SHA.txt?token=CE5ZHCHCMWWB5MLPSHWJCZTKU4IVJAA'
-          curl -fL --retry 3 -o game-f351963.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.position.worklet.js?token=CE5ZHCE56SK6CVOYXTINO5LKU4IVJAA'
-          curl -fL --retry 3 -o game-f351963.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.worklet.js?token=CE5ZHCH2JG4WVNN5BDM73HTKU4IVJAA'
-          curl -fL --retry 3 -o game-f351963.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.js?token=CE5ZHCCMWVCOFOWZ7FMMSZLKU4IVJAA'
-          curl -fL --retry 3 -o game-f351963.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.pck?token=CE5ZHCDFV3IQTUGL2SKQSFLKU4IVJAA'
-          curl -fL --retry 3 -o game-f351963.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.wasm?token=CE5ZHCFWBOLOCQIVVMPVDSLKU4IVJAA'
-          curl -fL --retry 3 -o index.apple-touch-icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.apple-touch-icon.png?token=CE5ZHCCIZPTXCZ3WMOHE3NTKU4IVJAA'
-          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.html?token=CE5ZHCATQ3MRBBQQIGFREQDKU4IVJAA'
-          curl -fL --retry 3 -o index.icon.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.icon.png?token=CE5ZHCDNMGKBDVNTU2YRAZ3KU4IVJAA'
-          curl -fL --retry 3 -o index.png 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.png?token=CE5ZHCD6IAFSLF53DC6QEQ3KU4IVJAA'
+          curl -fL --retry 3 -o BUILD_SHA.txt 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/BUILD_SHA.txt?token=CE5ZHCA7D747EA6WNO556GTKU4JGZAA'
+          curl -fL --retry 3 -o game-f351963.audio.position.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.position.worklet.js?token=CE5ZHCFNYAUNAN4PSE6W43TKU4JGZAA'
+          curl -fL --retry 3 -o game-f351963.audio.worklet.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.audio.worklet.js?token=CE5ZHCBYOBLJLOV6TU5MBJDKU4JGZAA'
+          curl -fL --retry 3 -o game-f351963.js 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.js?token=CE5ZHCDTBEZB7TRY562CRLTKU4JGZAA'
+          curl -fL --retry 3 -o game-f351963.pck 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.pck?token=CE5ZHCCQEVD3JKBQWNO4WMTKU4JGZAA'
+          curl -fL --retry 3 -o game-f351963.wasm 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/game-f351963.wasm?token=CE5ZHCEORXJBQORQSPASR2LKU4JGZAA'
+          curl -fL --retry 3 -o index.html 'https://raw.githubusercontent.com/junkuan5168-droid/-cat-game-city/7eb6f4883c5c3d784c214c414c54fdc63621fb58/playtest/index.html?token=CE5ZHCBV2RWTC4K7GRQRIBLKU4JGZAA'
           test "$(tr -d '\r\n' < BUILD_SHA.txt)" = 'f35196392902d62dd2733a5b2b6e9ae6dfbeab3d'
           test "$(stat -c%s game-f351963.pck)" = '8957716'
           test "$(stat -c%s game-f351963.wasm)" = '39514754'
@@ -40,7 +37,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add BUILD_SHA.txt game-f351963.* index.html index.apple-touch-icon.png index.icon.png index.png
+          git add BUILD_SHA.txt game-f351963.* index.html
           if git diff --cached --quiet; then
             echo 'Payload already current.'
             exit 0
