@@ -1,0 +1,105 @@
+name: Cleanup all Actions storage
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/cleanup-all-actions-storage.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Delete all Actions artifacts and caches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deleted_artifacts=0
+          artifact_bytes=0
+          while :; do
+            curl -fsSL \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/actions/artifacts?per_page=100&page=1" \
+              -o /tmp/artifacts.json
+
+            python3 - /tmp/artifacts.json > /tmp/artifacts.tsv <<'PY'
+          import json, sys
+          data=json.load(open(sys.argv[1]))
+          for a in data.get("artifacts", []):
+              print("{}\t{}\t{}".format(a["id"], a["name"], a.get("size_in_bytes",0)))
+          PY
+
+            count="$(wc -l < /tmp/artifacts.tsv | tr -d ' ')"
+            [ "$count" -gt 0 ] || break
+
+            while IFS=$'\t' read -r id name size; do
+              curl -fsS -X DELETE \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$REPO/actions/artifacts/$id"
+              deleted_artifacts=$((deleted_artifacts + 1))
+              artifact_bytes=$((artifact_bytes + size))
+              echo "deleted artifact: $name ($size bytes)"
+            done < /tmp/artifacts.tsv
+          done
+
+          deleted_caches=0
+          cache_bytes=0
+          while :; do
+            curl -fsSL \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/$REPO/actions/caches?per_page=100&page=1" \
+              -o /tmp/caches.json
+
+            python3 - /tmp/caches.json > /tmp/caches.tsv <<'PY'
+          import json, sys
+          data=json.load(open(sys.argv[1]))
+          for c in data.get("actions_caches", []):
+              print("{}\t{}\t{}".format(c["id"], c["key"], c.get("size_in_bytes",0)))
+          PY
+
+            count="$(wc -l < /tmp/caches.tsv | tr -d ' ')"
+            [ "$count" -gt 0 ] || break
+
+            while IFS=$'\t' read -r id key size; do
+              curl -fsS -X DELETE \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$REPO/actions/caches/$id"
+              deleted_caches=$((deleted_caches + 1))
+              cache_bytes=$((cache_bytes + size))
+              echo "deleted cache: $key ($size bytes)"
+            done < /tmp/caches.tsv
+          done
+
+          total=$((artifact_bytes + cache_bytes))
+          echo "deleted_artifacts=$deleted_artifacts"
+          echo "deleted_caches=$deleted_caches"
+          echo "artifact_bytes=$artifact_bytes"
+          echo "cache_bytes=$cache_bytes"
+          echo "total_bytes=$total"
+          {
+            echo "### Full Actions storage cleanup"
+            echo "- Deleted artifacts: $deleted_artifacts"
+            echo "- Deleted caches: $deleted_caches"
+            echo "- Artifact bytes removed: $artifact_bytes"
+            echo "- Cache bytes removed: $cache_bytes"
+            echo "- Total listed bytes removed: $total"
+            echo "- Source code, commits, branches, releases, workflow files, and deployment history were not deleted."
+          } >> "$GITHUB_STEP_SUMMARY"
